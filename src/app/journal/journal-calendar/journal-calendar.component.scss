@@ -1,0 +1,16 @@
+.journal-calendar-mat {
+  padding: 2.5rem 2rem;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(25, 118, 210, 0.08);
+  background: #fff;
+  margin: 2rem auto;
+  max-width: 500px;
+}
+.empty-state {
+  color: #888;
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+}

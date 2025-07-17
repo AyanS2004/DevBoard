@@ -1,0 +1,19 @@
+<mat-card class="project-detail-mat">
+  <h2>Project: {{project.name}}</h2>
+  <div class="project-meta">
+    <span><mat-icon>calendar_today</mat-icon> {{project.dueDate}}</span>
+    <span><mat-icon>group</mat-icon> {{project.team}}</span>
+  </div>
+  <h3>Tasks</h3>
+  <mat-list>
+    <mat-list-item *ngFor="let task of project.tasks">
+      <mat-icon matListIcon>check_circle</mat-icon>
+      <div matLine>{{task.title}}</div>
+      <button mat-icon-button color="accent"><mat-icon>edit</mat-icon></button>
+      <button mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
+    </mat-list-item>
+  </mat-list>
+  <button mat-stroked-button color="primary" class="add-task-btn" (click)="openAddTaskDialog()">
+    <mat-icon>add</mat-icon> Add Task
+  </button>
+</mat-card>

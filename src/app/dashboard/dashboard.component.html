@@ -1,0 +1,202 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <div class="welcome-section">
+      <h1 class="dashboard-title">{{ getGreetingForUser(currentUser$ | async) }}</h1>
+      <p class="dashboard-subtitle">Here's what's happening with your productivity today</p>
+    </div>
+    <div class="header-actions">
+      <button mat-raised-button color="primary" class="action-btn" (click)="openAddTaskDialog()">
+        <mat-icon>add</mat-icon>
+        New Task
+      </button>
+    </div>
+  </div>
+
+  <!-- Theme Information Section -->
+  <mat-card class="theme-info-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>palette</mat-icon>
+        Current Theme
+      </mat-card-title>
+      <mat-card-subtitle>Your current theme settings</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="theme-info">
+        <div class="theme-details">
+          <p><strong>Active Theme:</strong> 
+            <span class="theme-badge" [class]="'theme-' + getCurrentTheme()">
+              {{ getCurrentTheme() | titlecase }}
+            </span>
+          </p>
+          <p><strong>Mode:</strong> 
+            <span *ngIf="getCurrentTheme() === 'amoled'" class="mode-badge amoled">AMOLED Black</span>
+            <span *ngIf="getCurrentTheme() === 'dark'" class="mode-badge dark">Dark Mode</span>
+            <span *ngIf="getCurrentTheme() === 'light'" class="mode-badge light">Light Mode</span>
+          </p>
+        </div>
+        <div class="theme-toggle-section">
+          <p>Try different themes:</p>
+          <app-theme-toggle></app-theme-toggle>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="stats-grid">
+    <mat-card class="stat-card primary">
+      <div class="card-icon blue">
+        <mat-icon>assignment</mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3>{{ activeProjects }}</h3>
+        <p>Active Projects</p>
+        <span class="stat-trend neutral">{{ activeProjects === 0 ? 'Start creating projects' : '+' + activeProjects + ' this month' }}</span>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card green">
+      <div class="card-icon green">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3>{{ tasksCompleted }}</h3>
+        <p>Tasks Completed</p>
+        <span class="stat-trend neutral">{{ tasksCompleted === 0 ? 'Complete your first task' : '+' + tasksCompleted + ' this week' }}</span>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card yellow">
+      <div class="card-icon yellow">
+        <mat-icon>timer</mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3>{{ pomodorosToday }}</h3>
+        <p>Pomodoros Today</p>
+        <span class="stat-trend neutral">{{ pomodorosToday === 0 ? 'Start your first session' : pomodorosToday * 25 + ' min focus time' }}</span>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card pink">
+      <div class="card-icon pink">
+        <mat-icon>event_note</mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3>{{ journalEntries }}</h3>
+        <p>Journal Entries</p>
+        <span class="stat-trend neutral">{{ journalEntries === 0 ? 'Write your first entry' : 'Daily streak: ' + journalEntries }}</span>
+      </div>
+    </mat-card>
+  </div>
+
+  <div class="dashboard-widgets">
+    <mat-card class="widget-card recent-activity">
+      <mat-card-header>
+        <mat-card-title>Recent Activity</mat-card-title>
+        <mat-card-subtitle>Your latest productivity updates</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="activity-list">
+          <div class="empty-state">
+            <mat-icon class="empty-state-icon">timeline</mat-icon>
+            <p class="empty-state-title">No activity yet</p>
+            <p class="empty-state-subtitle">Your recent productivity updates will appear here</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="widget-card productivity-chart">
+      <mat-card-header>
+        <mat-card-title>Weekly Productivity</mat-card-title>
+        <mat-card-subtitle>Tasks completed this week</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-container">
+          <ngx-charts-line-chart
+            [view]="view"
+            [scheme]="colorScheme"
+            [results]="multiData"
+            [gradient]="gradient"
+            [xAxis]="showXAxis"
+            [yAxis]="showYAxis"
+            [legend]="showLegend"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            [xAxisLabel]="xAxisLabel"
+            [yAxisLabel]="yAxisLabel"
+            [timeline]="timeline"
+            [animations]="animations"
+            (select)="onSelect($event)"
+            (activate)="onActivate($event)"
+            (deactivate)="onDeactivate($event)">
+          </ngx-charts-line-chart>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- AI Insights Section -->
+  <app-ai-insights></app-ai-insights>
+
+  <!-- Additional Charts Section -->
+  <div class="additional-charts">
+    <mat-card class="widget-card category-chart">
+      <mat-card-header>
+        <mat-card-title>Tasks by Category</mat-card-title>
+        <mat-card-subtitle>Breakdown of completed tasks by type</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-container">
+          <ngx-charts-bar-vertical
+            [view]="view"
+            [scheme]="colorScheme"
+            [results]="taskCategoryData"
+            [gradient]="gradient"
+            [xAxis]="showXAxis"
+            [yAxis]="showYAxis"
+            [legend]="false"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            [xAxisLabel]="'Category'"
+            [yAxisLabel]="'Tasks'"
+            [animations]="animations"
+            [roundDomains]="true"
+            (select)="onSelect($event)"
+            (activate)="onActivate($event)"
+            (deactivate)="onDeactivate($event)">
+          </ngx-charts-bar-vertical>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="widget-card pomodoro-chart">
+      <mat-card-header>
+        <mat-card-title>Today's Focus Sessions</mat-card-title>
+        <mat-card-subtitle>Pomodoro sessions throughout the day</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-container">
+          <ngx-charts-area-chart
+            [view]="view"
+            [scheme]="pomodoroColorScheme"
+            [results]="[{ name: 'Focus Time', series: pomodoroData }]"
+            [gradient]="true"
+            [xAxis]="showXAxis"
+            [yAxis]="showYAxis"
+            [legend]="false"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            [xAxisLabel]="'Time'"
+            [yAxisLabel]="'Sessions'"
+            [animations]="animations"
+            [curve]="'cardinal'"
+            (select)="onSelect($event)"
+            (activate)="onActivate($event)"
+            (deactivate)="onDeactivate($event)">
+          </ngx-charts-area-chart>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

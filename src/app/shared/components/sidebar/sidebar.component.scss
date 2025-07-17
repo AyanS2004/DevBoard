@@ -1,0 +1,195 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 2rem 1rem;
+  min-width: 180px;
+  height: 100%;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.sidebar a {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.sidebar a:hover {
+  background: var(--bg-tertiary);
+}
+
+.sidebar-mat {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 20px;
+  margin: 80px 0 16px 16px;
+  width: 260px;
+  height: calc(100vh - 96px);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px var(--shadow-color) !important;
+  padding: 24px 0;
+  transition: all 0.3s ease;
+}
+
+.sidebar-header {
+  padding: 0 24px 24px 24px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  background: linear-gradient(135deg, var(--accent-color) 0%, #21cbf3 100%);
+  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 32px;
+  box-shadow: 0 4px 16px rgba(33, 203, 243, 0.18);
+  margin-right: 16px;
+}
+
+.user-details h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.user-details p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 0 0 0;
+}
+
+.nav-section {
+  margin-bottom: 8px;
+}
+
+.nav-section-title {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin: 16px 0 8px 24px;
+  letter-spacing: 1px;
+}
+
+/* Angular Material Nav List Styling */
+.nav-section mat-nav-list {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.nav-section mat-nav-list a[mat-list-item] {
+  display: flex !important;
+  align-items: center !important;
+  padding: 12px 24px !important;
+  border-radius: 12px !important;
+  color: var(--text-primary) !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+  margin: 2px 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  height: auto !important;
+  min-height: 48px !important;
+}
+
+.nav-section mat-nav-list a[mat-list-item]:hover {
+  background: rgba(33, 203, 243, 0.1) !important;
+  color: var(--accent-color) !important;
+}
+
+.nav-section mat-nav-list a[mat-list-item].active {
+  background: linear-gradient(90deg, var(--accent-color) 0%, #21cbf3 100%) !important;
+  box-shadow: 0 4px 12px rgba(33, 203, 243, 0.15) !important;
+  color: #fff !important;
+}
+
+.nav-section mat-nav-list a[mat-list-item] .mat-icon {
+  font-size: 24px !important;
+  margin-right: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: inherit !important;
+  width: 24px !important;
+  height: 24px !important;
+}
+
+.nav-section mat-nav-list a[mat-list-item] span {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: inherit !important;
+}
+
+/* Override Angular Material default styles */
+::ng-deep .sidebar-mat mat-nav-list .mat-mdc-list-item {
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 12px !important;
+}
+
+::ng-deep .sidebar-mat mat-nav-list .mat-mdc-list-item .mdc-list-item__content {
+  padding: 0 !important;
+}
+
+::ng-deep .sidebar-mat mat-nav-list .mat-mdc-list-item .mdc-list-item__primary-text {
+  color: inherit !important;
+}
+
+.sidebar-footer {
+  padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.quick-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+}
+
+.quick-stats .mat-icon {
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+/* Scrollbar styling */
+.sidebar-mat::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-mat::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-mat::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 2px;
+}
+
+.sidebar-mat::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+} 

@@ -1,0 +1,89 @@
+:root {
+  --primary: #00bcd4; /* Vibrant cyan/teal */
+  --secondary: #3f51b5; /* Muted blue */
+  --accent: #ffb300; /* Amber */
+  --success: #4caf50; /* Green */
+  --warning: #ff9800; /* Orange */
+  --error: #f44336; /* Red */
+  --info: #2196f3; /* Blue */
+  --purple: #9c27b0; /* Purple */
+  --pink: #e91e63; /* Pink */
+  --lime: #cddc39; /* Lime */
+  --deep-orange: #ff5722; /* Deep Orange */
+  --light-blue: #03a9f4; /* Light Blue */
+  --gray: #607d8b; /* Gray */
+  --bg: #181c20; /* Deep dark background */
+  --bg-alt: #23272f; /* Slightly lighter for surfaces */
+  --surface: #23272f; /* Card/Panel background */
+  --surface-gradient: linear-gradient(135deg, #23272f 60%, #3f51b5 100%); /* Sleek card gradient */
+  --border: #2c313a; /* Subtle border */
+  --text: #f5f6fa; /* Main text */
+  --text-secondary: #b0b8c1; /* Secondary text */
+  --text-heading: #ffffff; /* Headings */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::ng-deep body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+::ng-deep html {
+  scroll-behavior: smooth;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.main-content {
+  flex: 1;
+  margin-top: 64px; /* Account for fixed navbar */
+  margin-left: 276px; /* Account for fixed sidebar (260px + 16px margin) */
+  padding: 24px;
+  background-color: var(--bg-primary);
+  transition: all 0.3s ease;
+  min-height: calc(100vh - 64px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 16px;
+    margin-top: 64px;
+    margin-left: 248px; /* Account for smaller sidebar (240px + 8px margin) */
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 12px;
+    margin-top: 64px;
+    margin-left: 224px; /* Account for smaller sidebar (220px + 4px margin) */
+  }
+}
+
+/* Theme-specific adjustments */
+.theme-amoled .main-content {
+  background-color: #000000;
+}
+
+.theme-dark .main-content {
+  background-color: #121212;
+}
+
+.theme-light .main-content {
+  background-color: #ffffff;
+}

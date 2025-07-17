@@ -1,0 +1,21 @@
+<div class="journal-header">
+  <h2>Journal</h2>
+  <div>
+    <button mat-raised-button color="primary" style="margin-right: 0.5rem;" (click)="openAddTaskDialog()"><mat-icon>add</mat-icon> Add Task</button>
+    <button mat-raised-button color="primary"><mat-icon>add</mat-icon> New Entry</button>
+  </div>
+</div>
+<div class="journal-timeline">
+  <div class="journal-entry" *ngFor="let entry of journalEntries">
+    <div class="entry-date">
+      <mat-icon>calendar_today</mat-icon> {{entry.date}}
+    </div>
+    <mat-card class="entry-card-mat">
+      <div class="entry-content">{{entry.content}}</div>
+      <div class="entry-actions">
+        <button mat-icon-button color="accent"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
+      </div>
+    </mat-card>
+  </div>
+</div>

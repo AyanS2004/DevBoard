@@ -1,0 +1,41 @@
+.project-detail-mat {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 16px !important;
+  color: var(--text-heading) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12) !important;
+  padding: 2.5rem 2rem !important;
+  margin: 2rem auto;
+  max-width: 700px;
+}
+.project-detail-mat h2 {
+  margin-bottom: 1.2rem;
+}
+.project-meta {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-secondary) !important;
+}
+.add-task-btn {
+  margin-top: 1.5rem;
+  background: var(--primary) !important;
+  color: var(--bg-alt) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+}
+.add-task-btn:hover {
+  background: var(--accent) !important;
+  color: var(--bg) !important;
+}
+
+mat-list-item {
+  color: var(--text) !important;
+  background: var(--bg-alt) !important;
+  border-radius: 8px !important;
+  margin-bottom: 0.5rem !important;
+}
+
+mat-list-item mat-icon {
+  color: var(--primary) !important;
+}

@@ -1,0 +1,128 @@
+<div class="project-board">
+  <div class="board-header">
+    <div class="header-content">
+      <h1 class="board-title">Project Board</h1>
+      <p class="board-subtitle">Manage your tasks with drag & drop</p>
+    </div>
+    <button mat-raised-button class="new-project-btn" (click)="openAddTaskDialog()">
+      <mat-icon>add</mat-icon>
+      New Task
+    </button>
+  </div>
+
+  <div class="board-columns" cdkDropListGroup>
+    <div class="board-column">
+      <div class="column-header todo">
+        <mat-icon>pending_actions</mat-icon>
+        <h3>To Do</h3>
+        <span class="task-count">{{todoTasks.length}}</span>
+      </div>
+      <div cdkDropList [cdkDropListData]="todoTasks" class="task-drop-list" (cdkDropListDropped)="drop($event)">
+        <div *ngIf="todoTasks.length === 0" class="empty-state">
+          <mat-icon class="empty-icon">assignment_outlined</mat-icon>
+          <p class="empty-text">No tasks to do</p>
+          <p class="empty-subtext">Add a new task to get started</p>
+        </div>
+        <mat-card class="task-card" *ngFor="let task of todoTasks" cdkDrag>
+          <div class="task-content">
+            <div class="task-header">
+              <h4 class="task-title">{{task.title}}</h4>
+              <span class="priority-badge" [class]="'priority-' + task.priority">{{task.priority}}</span>
+            </div>
+            <p class="task-description">{{task.description}}</p>
+            <div class="task-meta">
+              <div class="task-assignee">
+                <mat-icon>account_circle</mat-icon>
+                <span>Assigned to you</span>
+              </div>
+              <div class="task-actions" (click)="onTaskActionClick($event)">
+                <button mat-icon-button class="action-btn edit" (click)="editTask(task)" title="Edit Task">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button class="action-btn delete" (click)="deleteTask(task)" title="Delete Task">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="board-column">
+      <div class="column-header progress">
+        <mat-icon>schedule</mat-icon>
+        <h3>In Progress</h3>
+        <span class="task-count">{{inProgressTasks.length}}</span>
+      </div>
+      <div cdkDropList [cdkDropListData]="inProgressTasks" class="task-drop-list" (cdkDropListDropped)="drop($event)">
+        <div *ngIf="inProgressTasks.length === 0" class="empty-state">
+          <mat-icon class="empty-icon">schedule</mat-icon>
+          <p class="empty-text">No tasks in progress</p>
+          <p class="empty-subtext">Move tasks here when you start working</p>
+        </div>
+        <mat-card class="task-card" *ngFor="let task of inProgressTasks" cdkDrag>
+          <div class="task-content">
+            <div class="task-header">
+              <h4 class="task-title">{{task.title}}</h4>
+              <span class="priority-badge" [class]="'priority-' + task.priority">{{task.priority}}</span>
+            </div>
+            <p class="task-description">{{task.description}}</p>
+            <div class="task-meta">
+              <div class="task-assignee">
+                <mat-icon>account_circle</mat-icon>
+                <span>Assigned to you</span>
+              </div>
+              <div class="task-actions" (click)="onTaskActionClick($event)">
+                <button mat-icon-button class="action-btn edit" (click)="editTask(task)" title="Edit Task">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button class="action-btn delete" (click)="deleteTask(task)" title="Delete Task">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="board-column">
+      <div class="column-header done">
+        <mat-icon>check_circle</mat-icon>
+        <h3>Done</h3>
+        <span class="task-count">{{doneTasks.length}}</span>
+      </div>
+      <div cdkDropList [cdkDropListData]="doneTasks" class="task-drop-list" (cdkDropListDropped)="drop($event)">
+        <div *ngIf="doneTasks.length === 0" class="empty-state">
+          <mat-icon class="empty-icon">check_circle_outline</mat-icon>
+          <p class="empty-text">No completed tasks</p>
+          <p class="empty-subtext">Move finished tasks here</p>
+        </div>
+        <mat-card class="task-card" *ngFor="let task of doneTasks" cdkDrag>
+          <div class="task-content">
+            <div class="task-header">
+              <h4 class="task-title">{{task.title}}</h4>
+              <span class="priority-badge" [class]="'priority-' + task.priority">{{task.priority}}</span>
+            </div>
+            <p class="task-description">{{task.description}}</p>
+            <div class="task-meta">
+              <div class="task-assignee">
+                <mat-icon>account_circle</mat-icon>
+                <span>Assigned to you</span>
+              </div>
+              <div class="task-actions" (click)="onTaskActionClick($event)">
+                <button mat-icon-button class="action-btn edit" (click)="editTask(task)" title="Edit Task">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button class="action-btn delete" (click)="deleteTask(task)" title="Delete Task">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

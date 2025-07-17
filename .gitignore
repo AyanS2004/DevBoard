@@ -1,0 +1,39 @@
+# Environment files
+.env
+backend/.env
+frontend/.env
+
+# Node dependencies
+**/node_modules/
+
+# Build output
+dist/
+frontend/dist/
+backend/dist/
+
+# Angular cache & artifacts
+/.angular/cache
+
+# Logs
+npm-debug.log*
+yarn-error.log*
+*.log
+
+# IDEs and editors
+.vscode/
+.idea/
+/*.sublime-workspace
+/.history/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Coverage reports
+coverage/
+
+# Misc
+/.sass-cache/
+/connect.lock
+/libpeerconnection.log
+testem.log

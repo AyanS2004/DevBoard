@@ -1,0 +1,34 @@
+<div style="display: flex; justify-content: flex-end; margin-bottom: 1.5rem;">
+  <button mat-raised-button color="primary" (click)="openAddTaskDialog()"><mat-icon>add</mat-icon> Add Task</button>
+</div>
+<mat-card class="pomodoro-mat">
+  <h2>Pomodoro Timer</h2>
+  <div class="timer-container">
+    <div class="timer-circle">
+      <svg viewBox="0 0 120 120">
+        <circle class="timer-bg" cx="60" cy="60" r="54" />
+        <circle class="timer-progress" cx="60" cy="60" r="54" [attr.stroke-dasharray]="339.292" [attr.stroke-dashoffset]="progressOffset" />
+      </svg>
+      <div class="timer-time">{{minutes}}:{{seconds | number: '2.0'}}</div>
+    </div>
+    <button mat-raised-button color="primary" (click)="toggleTimer()">
+      <mat-icon>{{isRunning ? 'pause' : 'play_arrow'}}</mat-icon> {{isRunning ? 'Pause' : 'Start'}}
+    </button>
+  </div>
+  <div class="pomodoro-stats">
+    <span><mat-icon>timer</mat-icon> Sessions: {{sessionCount}}</span>
+    <span><mat-icon>check_circle</mat-icon> Completed: {{completedCount}}</span>
+  </div>
+  <h3>Session Log</h3>
+  <mat-list *ngIf="sessionLog.length > 0">
+    <mat-list-item *ngFor="let session of sessionLog">
+      <mat-icon matListIcon [class.completed]="session.status === 'completed'" [class.interrupted]="session.status === 'interrupted'">
+        {{session.status === 'completed' ? 'check_circle' : 'pause_circle'}}
+      </mat-icon>
+      <div matLine>{{getSessionDisplayText(session)}}</div>
+    </mat-list-item>
+  </mat-list>
+  <div *ngIf="sessionLog.length === 0" class="empty-state">
+    <mat-icon>info</mat-icon> No sessions yet. Start your first pomodoro session!
+  </div>
+</mat-card>

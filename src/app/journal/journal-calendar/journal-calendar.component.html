@@ -1,0 +1,18 @@
+<mat-card class="journal-calendar-mat">
+  <h2>Journal Calendar</h2>
+  <mat-form-field appearance="fill">
+    <mat-label>Select Date</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <mat-list *ngIf="entriesForSelectedDate.length > 0">
+    <mat-list-item *ngFor="let entry of entriesForSelectedDate">
+      <mat-icon matListIcon>event_note</mat-icon>
+      <div matLine>{{entry.content}}</div>
+    </mat-list-item>
+  </mat-list>
+  <div *ngIf="entriesForSelectedDate.length === 0" class="empty-state">
+    <mat-icon>info</mat-icon> No entries for this date.
+  </div>
+</mat-card>

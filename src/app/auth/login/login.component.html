@@ -1,0 +1,24 @@
+<mat-card class="auth-mat-card">
+  <h2>Login</h2>
+  <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" name="email" #email="ngModel" ngModel required email />
+      <mat-error *ngIf="email.invalid && email.touched">Valid email required</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" name="password" #password="ngModel" ngModel required minlength="6" />
+      <mat-error *ngIf="password.invalid && password.touched">Password required (min 6 chars)</mat-error>
+    </mat-form-field>
+    <button 
+      mat-raised-button 
+      color="primary" 
+      class="full-width" 
+      type="submit"
+      [disabled]="isLoading || loginForm.invalid">
+      {{ isLoading ? 'Logging in...' : 'Login' }}
+    </button>
+  </form>
+  <p class="auth-link">Don't have an account? <a routerLink="/register">Register</a></p>
+</mat-card>

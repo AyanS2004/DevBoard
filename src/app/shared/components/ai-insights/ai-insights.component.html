@@ -1,0 +1,154 @@
+<div class="ai-insights-container">
+  <mat-card class="insights-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>psychology</mat-icon>
+        AI Insights
+      </mat-card-title>
+      <mat-card-subtitle>
+        Personalized productivity analysis
+      </mat-card-subtitle>
+      <div class="spacer"></div>
+      <button mat-icon-button (click)="refreshInsights()" [disabled]="loading">
+        <mat-icon [class.spinning]="loading">refresh</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-state">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <p>Analyzing your productivity patterns...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error && !loading" class="error-state">
+        <mat-icon color="warn">error</mat-icon>
+        <p>Unable to load AI insights. Please try again.</p>
+        <button mat-button (click)="refreshInsights()">
+          <mat-icon>refresh</mat-icon>
+          Retry
+        </button>
+      </div>
+
+      <!-- Main Content -->
+      <div *ngIf="!loading && !error && insights" class="insights-content">
+        <!-- Productivity Overview -->
+        <div class="productivity-overview">
+          <h3>Productivity Overview</h3>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-value">{{ insights.completionRate.toFixed(1) }}%</span>
+              <span class="stat-label">Completion Rate</span>
+              <mat-progress-bar 
+                [value]="insights.completionRate" 
+                [color]="getCompletionRateColor(insights.completionRate)">
+              </mat-progress-bar>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{{ formatTime(insights.averageTimePerTask) }}</span>
+              <span class="stat-label">Avg Time/Task</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{{ insights.focusScore }}</span>
+              <span class="stat-label">Focus Score</span>
+              <mat-progress-bar 
+                [value]="insights.focusScore" 
+                [color]="insights.focusScore > 70 ? 'primary' : 'accent'">
+              </mat-progress-bar>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{{ insights.mostProductiveTime }}</span>
+              <span class="stat-label">Peak Time</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Breakdown -->
+        <div class="category-breakdown" *ngIf="getCategoryEntries(insights.categoryStats).length > 0">
+          <h3>Task Categories</h3>
+          <div class="category-list">
+            <div class="category-item" *ngFor="let category of getCategoryEntries(insights.categoryStats)">
+              <div class="category-info">
+                <span class="category-name">{{ category.key }}</span>
+                <span class="category-count">{{ category.value }} tasks</span>
+              </div>
+              <div class="category-progress">
+                <mat-progress-bar 
+                  [value]="getCategoryPercentage(category.value, insights.totalTasks)"
+                  mode="determinate">
+                </mat-progress-bar>
+                <span class="percentage">{{ getCategoryPercentage(category.value, insights.totalTasks).toFixed(1) }}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weekly Trend -->
+        <div class="weekly-trend" *ngIf="insights.weeklyTrend !== 0">
+          <h3>Weekly Trend</h3>
+          <div class="trend-indicator" [ngClass]="{'positive': insights.weeklyTrend > 0, 'negative': insights.weeklyTrend < 0}">
+            <mat-icon>{{ insights.weeklyTrend > 0 ? 'trending_up' : 'trending_down' }}</mat-icon>
+            <span>{{ insights.weeklyTrend > 0 ? '+' : '' }}{{ insights.weeklyTrend }}%</span>
+            <span class="trend-text">{{ insights.weeklyTrend > 0 ? 'improvement' : 'decline' }} from last week</span>
+          </div>
+        </div>
+
+        <!-- Burnout Risk -->
+        <div class="burnout-risk" *ngIf="insights.burnoutRisk > 30">
+          <h3>Burnout Risk</h3>
+          <div class="risk-indicator" [ngClass]="{'high': insights.burnoutRisk > 70, 'medium': insights.burnoutRisk > 40}">
+            <mat-icon>{{ insights.burnoutRisk > 70 ? 'warning' : 'info' }}</mat-icon>
+            <span>{{ insights.burnoutRisk }}% Risk Level</span>
+            <mat-progress-bar 
+              [value]="insights.burnoutRisk" 
+              [color]="insights.burnoutRisk > 70 ? 'warn' : 'accent'">
+            </mat-progress-bar>
+          </div>
+        </div>
+
+        <!-- AI Recommendations -->
+        <div class="ai-recommendations" *ngIf="recommendations.length > 0">
+          <h3>AI Recommendations</h3>
+          <div class="recommendations-list">
+            <div class="recommendation-item" *ngFor="let rec of recommendations">
+              <div class="recommendation-header">
+                <mat-icon [style.color]="rec.color || getInsightColor(rec.type)">
+                  {{ rec.icon || getInsightIcon(rec.type) }}
+                </mat-icon>
+                <div class="recommendation-title">
+                  <h4>{{ rec.title }}</h4>
+                  <mat-chip 
+                    [style.background-color]="getPriorityColor(rec.priority)"
+                    [style.color]="'white'"
+                    [style.font-size]="'0.75rem'">
+                    {{ rec.priority.toUpperCase() }}
+                  </mat-chip>
+                </div>
+              </div>
+              <p class="recommendation-description">{{ rec.description }}</p>
+              <div class="recommendation-meta">
+                <span class="category">{{ rec.category }}</span>
+                <span class="actionable" *ngIf="rec.actionable">
+                  <mat-icon>task_alt</mat-icon>
+                  Actionable
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Tips -->
+        <div class="quick-tips" *ngIf="insights.recommendations.length > 0">
+          <h3>Quick Tips</h3>
+          <div class="tips-list">
+            <div class="tip-item" *ngFor="let tip of insights.recommendations">
+              <mat-icon>lightbulb</mat-icon>
+              <span>{{ tip }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div> 

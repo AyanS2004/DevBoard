@@ -1,0 +1,96 @@
+.journal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.journal-timeline {
+  position: relative;
+  margin-left: 2rem;
+  padding-left: 2rem;
+  border-left: 2px solid #b0bec5;
+}
+
+.journal-timeline::before {
+  content: none;
+}
+
+.journal-entry {
+  position: relative;
+  margin-bottom: 2.5rem;
+  min-height: 60px;
+}
+
+.journal-entry::before {
+  content: '';
+  position: absolute;
+  left: -2.25rem;
+  top: 0.7rem;
+  width: 20px;
+  height: 12px;
+  border-radius: 10px / 6px;
+  background: #1976d2;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(25, 118, 210, 0.10);
+  z-index: 2;
+}
+
+.entry-date {
+  position: absolute;
+  left: -4rem;
+  top: 0.2rem;
+  background: linear-gradient(135deg, #1976d2 0%, #21cbf3 100%);
+  color: #fff;
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .8rem;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(33, 203, 243, 0.18);
+  border: 3px solid #fff;
+  z-index: 2;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.entry-date:hover {
+  transform: scale(1.08) rotate(-3deg);
+  box-shadow: 0 8px 32px rgba(33, 203, 243, 0.25);
+}
+
+.entry-card-mat {
+  margin-left: 2.5rem;
+  padding: 1.7rem 1.5rem;
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(25, 118, 210, 0.10);
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(8px);
+  min-width: 320px;
+  max-width: 650px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-left: 6px solid #1976d2;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.entry-card-mat:hover {
+  box-shadow: 0 12px 40px rgba(33, 203, 243, 0.18);
+  border-left: 6px solid #43e97b;
+}
+
+.entry-content {
+  font-size: 1.18rem;
+  font-weight: 600;
+  color: #232526;
+  letter-spacing: 0.01em;
+}
+
+.entry-actions button {
+  margin-left: 0.7rem;
+  transition: transform 0.15s;
+}
+.entry-actions button:hover {
+  transform: scale(1.15);
+}

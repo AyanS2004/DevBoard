@@ -1,0 +1,306 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 2rem 1rem;
+  min-width: 180px;
+  height: calc(100% - 96px);
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.sidebar a {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.sidebar a:hover {
+  background: var(--bg-tertiary);
+}
+
+.sidebar-mat {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 20px;
+  margin: 80px 0 16px 16px;
+  width: 260px;
+  height: calc(100vh - 96px);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px var(--shadow-color) !important;
+  padding: 24px 0;
+  transition: all 0.3s ease;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-header {
+  padding: 0 24px 24px 24px;
+  flex-shrink: 0;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  background: linear-gradient(135deg, var(--accent-color) 0%, #21cbf3 100%);
+  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 32px;
+  box-shadow: 0 4px 16px rgba(33, 203, 243, 0.18);
+  margin-right: 16px;
+}
+
+.user-details h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.user-details p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.nav-section {
+  margin-bottom: 8px;
+}
+
+.nav-section-title {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin: 16px 0 8px 24px;
+  letter-spacing: 1px;
+}
+
+/* Angular Material Nav List Styling */
+.nav-section mat-nav-list {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.nav-section mat-nav-list a[mat-list-item] {
+  display: flex !important;
+  align-items: center !important;
+  padding: 12px 24px !important;
+  border-radius: 12px !important;
+  color: var(--text-primary) !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+  margin: 2px 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  height: auto !important;
+  min-height: 48px !important;
+}
+
+.nav-section mat-nav-list a[mat-list-item]:hover {
+  background: rgba(33, 203, 243, 0.1) !important;
+  color: var(--accent-color) !important;
+}
+
+.nav-section mat-nav-list a[mat-list-item].active {
+  background: linear-gradient(90deg, var(--accent-color) 0%, #21cbf3 100%) !important;
+  box-shadow: 0 4px 12px rgba(33, 203, 243, 0.15) !important;
+  color: #fff !important;
+}
+
+.nav-section mat-nav-list a[mat-list-item] .mat-icon {
+  font-size: 24px !important;
+  margin-right: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: inherit !important;
+  width: 24px !important;
+  height: 24px !important;
+}
+
+.nav-section mat-nav-list a[mat-list-item] span {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: inherit !important;
+}
+
+/* Override Angular Material default styles */
+::ng-deep .sidebar-mat mat-nav-list .mat-mdc-list-item {
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 12px !important;
+}
+
+::ng-deep .sidebar-mat mat-nav-list .mat-mdc-list-item .mdc-list-item__content {
+  padding: 0 !important;
+}
+
+::ng-deep .sidebar-mat mat-nav-list .mat-mdc-list-item .mdc-list-item__primary-text {
+  color: inherit !important;
+}
+
+.sidebar-footer {
+  padding: 24px 24px 24px 24px;
+  border-top: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+  margin-top: auto;
+}
+
+.quick-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--text-secondary);
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.stat-item:hover {
+  color: var(--accent-color);
+}
+
+.stat-item .mat-icon {
+  font-size: 18px;
+  margin-right: 12px;
+  color: var(--accent-color);
+  opacity: 0.8;
+}
+
+/* Scrollbar styling */
+.sidebar-mat::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-mat::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-mat::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 2px;
+}
+
+.sidebar-mat::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Theme-specific adjustments */
+.theme-amoled .sidebar-mat {
+  background-color: #000000 !important;
+  border-color: #1a1a1a !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8) !important;
+}
+
+.theme-dark .sidebar-mat {
+  background-color: #1e1e1e !important;
+  border-color: #333333 !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+.theme-light .sidebar-mat {
+  background-color: #f5f5f5 !important;
+  border-color: #e0e0e0 !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .sidebar-mat {
+    width: 240px;
+    margin: 80px 0 16px 8px;
+  }
+  
+  .sidebar-footer {
+    padding: 20px 20px 20px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar-mat {
+    width: 220px;
+    margin: 80px 0 16px 4px;
+    padding: 16px 0;
+  }
+  
+  .sidebar-header {
+    padding: 0 16px 16px 16px;
+  }
+  
+  .nav-section mat-nav-list a[mat-list-item] {
+    padding: 10px 16px !important;
+  }
+  
+  .nav-section-title {
+    margin: 12px 0 6px 16px;
+  }
+  
+  .sidebar-footer {
+    padding: 16px 16px 16px 16px;
+  }
+  
+  .stat-item {
+    font-size: 0.85rem;
+  }
+}
+
+/* Ensure sidebar takes full viewport height and scrolls if needed */
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 0;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* If sidebar is inside a parent, ensure parent allows it to grow */
+:host-context(body), :host-context(html) {
+  height: 100vh;
+  min-height: 0;
+}
+
+/* Optional: style scrollbars for better UX */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #e0e0e0;
+  border-radius: 4px;
+}

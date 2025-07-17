@@ -1,0 +1,68 @@
+<div class="pomodoro-log-container">
+  <h2>Pomodoro Analytics</h2>
+  
+  <div class="stats-grid">
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{stats.totalSessions}}</div>
+        <div class="stat-label">Total Sessions</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{stats.completedSessions}}</div>
+        <div class="stat-label">Completed</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{stats.completionRate}}%</div>
+        <div class="stat-label">Success Rate</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{formatTime(stats.totalFocusTime)}}</div>
+        <div class="stat-label">Total Focus Time</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="detailed-stats">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Session Details</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            <mat-icon matListIcon>today</mat-icon>
+            <div matLine>Today's Sessions</div>
+            <div matLine class="stat-value">{{stats.todaySessions}}</div>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <mat-icon matListIcon>date_range</mat-icon>
+            <div matLine>This Week's Sessions</div>
+            <div matLine class="stat-value">{{stats.thisWeekSessions}}</div>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <mat-icon matListIcon>timer</mat-icon>
+            <div matLine>Average Session Length</div>
+            <div matLine class="stat-value">{{stats.averageSessionLength}} minutes</div>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <mat-icon matListIcon>pause_circle</mat-icon>
+            <div matLine>Interrupted Sessions</div>
+            <div matLine class="stat-value">{{stats.interruptedSessions}}</div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<mat-toolbar class="navbar-mat">
+  <div class="navbar-brand">
+    <mat-icon class="brand-icon">dashboard</mat-icon>
+    <span class="logo">DevBoard</span>
+  </div>
+  
+  <div class="navbar-nav">
+    <a mat-button routerLink="/dashboard" routerLinkActive="active">
+      <mat-icon>dashboard</mat-icon>
+      <span>Dashboard</span>
+    </a>
+    <a mat-button routerLink="/projects" routerLinkActive="active">
+      <mat-icon>view_kanban</mat-icon>
+      <span>Projects</span>
+    </a>
+    <a mat-button routerLink="/journal" routerLinkActive="active">
+      <mat-icon>event_note</mat-icon>
+      <span>Journal</span>
+    </a>
+    <a mat-button routerLink="/pomodoro" routerLinkActive="active">
+      <mat-icon>timer</mat-icon>
+      <span>Pomodoro</span>
+    </a>
+  </div>
+
+  <div class="navbar-user">
+    <button mat-button class="user-profile">
+      <mat-icon>notifications_none</mat-icon>
+    </button>
+    
+    <!-- Theme Toggle Component -->
+    <app-theme-toggle></app-theme-toggle>
+    
+    <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-profile">
+      <mat-icon>account_circle</mat-icon>
+      <span class="user-name" *ngIf="currentUser$ | async as user">{{ user.name }}</span>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </div>
+</mat-toolbar>
