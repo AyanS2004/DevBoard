@@ -1,0 +1,128 @@
+<div class="notification-dropdown">
+  <!-- Notification Bell Button -->
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="notificationMenu"
+    class="notification-button"
+    id="main-notification-button"
+    [matBadge]="unreadCount"
+    [matBadgeHidden]="unreadCount === 0"
+    matBadgeColor="warn"
+    matBadgeSize="small">
+    <mat-icon>notifications</mat-icon>
+  </button>
+
+  <!-- Notification Menu -->
+  <mat-menu #notificationMenu="matMenu" class="notification-menu" xPosition="before">
+    <div class="notification-menu-content" (click)="$event.stopPropagation()">
+      
+      <!-- Header with Current Time -->
+      <div class="notification-header">
+        <div class="current-time">
+          <div class="time-display">{{ formatTime(currentTime) }}</div>
+          <div class="date-display">{{ formatDate(currentTime) }}</div>
+        </div>
+        <div class="header-actions">
+          <button mat-icon-button (click)="markAllAsRead()" *ngIf="unreadCount > 0" title="Mark all as read">
+            <mat-icon>done_all</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Notifications List -->
+      <div class="notifications-list">
+        <div *ngIf="notifications.length === 0" class="empty-state">
+          <mat-icon>notifications_none</mat-icon>
+          <p>No notifications</p>
+          <span>You're all caught up!</span>
+        </div>
+
+        <div *ngFor="let notification of notifications" 
+             class="notification-item"
+             [class.unread]="!notification.read"
+             [class.urgent]="notification.priority === 'urgent'"
+             [class.high]="notification.priority === 'high'">
+          
+          <!-- Notification Icon -->
+          <div class="notification-icon">
+            <mat-icon [style.color]="getNotificationColor(notification)">
+              {{ getNotificationIcon(notification) }}
+            </mat-icon>
+          </div>
+
+          <!-- Notification Content -->
+          <div class="notification-content">
+            <div class="notification-header-item">
+              <div class="notification-title">{{ notification.title }}</div>
+              <div class="notification-time">{{ getRelativeTime(notification.timestamp) }}</div>
+            </div>
+            
+            <div class="notification-message">{{ notification.message }}</div>
+            
+            <!-- Priority Badge -->
+            <div class="notification-meta">
+              <mat-chip 
+                [style.background-color]="getNotificationColor(notification)"
+                [style.color]="'white'"
+                class="priority-chip">
+                {{ getPriorityLabel(notification.priority) }}
+              </mat-chip>
+              
+              <!-- Due Time Display -->
+              <div *ngIf="notification.dueTime" class="due-time">
+                <mat-icon>schedule</mat-icon>
+                <span>{{ getTimeUntilDue(notification.dueTime) }}</span>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="notification-actions" *ngIf="notification.actions && notification.actions.length > 0">
+              <button 
+                *ngFor="let action of notification.actions" 
+                mat-button 
+                [color]="action.primary ? 'primary' : 'basic'"
+                [class.primary-action]="action.primary"
+                (click)="handleNotificationAction(notification, action.id)"
+                class="action-button">
+                <mat-icon>{{ action.icon }}</mat-icon>
+                {{ action.label }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Notification Actions Menu -->
+          <div class="notification-menu-actions">
+            <button mat-icon-button [matMenuTriggerFor]="actionMenu" class="action-menu-button">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            
+            <mat-menu #actionMenu="matMenu">
+              <button mat-menu-item (click)="markAsRead(notification)" *ngIf="!notification.read">
+                <mat-icon>mark_email_read</mat-icon>
+                Mark as read
+              </button>
+              <button mat-menu-item (click)="removeNotification(notification)">
+                <mat-icon>delete</mat-icon>
+                Remove
+              </button>
+            </mat-menu>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="notification-footer" *ngIf="notifications.length > 0">
+        <mat-divider></mat-divider>
+        <div class="footer-content">
+          <span class="notification-count">{{ notifications.length }} total notifications</span>
+          <button mat-button color="primary" class="view-all-button">
+            View All
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </mat-menu>
+</div> 

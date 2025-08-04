@@ -9,6 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService, User } from '../services/auth.service';
 import { ThemeService, ThemeMode } from '../services/theme.service';
 import { ThemeToggleComponent } from '../components/theme-toggle/theme-toggle.component';
+import { NotificationDropdownComponent } from '../components/notification-dropdown/notification-dropdown.component';
 
 @Component({
   selector: 'app-navba',
@@ -21,7 +22,8 @@ import { ThemeToggleComponent } from '../components/theme-toggle/theme-toggle.co
     MatIconModule,
     MatMenuModule,
     MatTooltipModule,
-    ThemeToggleComponent
+    ThemeToggleComponent,
+    NotificationDropdownComponent
   ],
   templateUrl: './navba.component.html',
   styleUrl: './navba.component.scss'

@@ -90,22 +90,6 @@
   </div>
 
   <div class="dashboard-widgets">
-    <mat-card class="widget-card recent-activity">
-      <mat-card-header>
-        <mat-card-title>Recent Activity</mat-card-title>
-        <mat-card-subtitle>Your latest productivity updates</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="activity-list">
-          <div class="empty-state">
-            <mat-icon class="empty-state-icon">timeline</mat-icon>
-            <p class="empty-state-title">No activity yet</p>
-            <p class="empty-state-subtitle">Your recent productivity updates will appear here</p>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-
     <mat-card class="widget-card productivity-chart">
       <mat-card-header>
         <mat-card-title>Weekly Productivity</mat-card-title>
@@ -139,64 +123,4 @@
   <!-- AI Insights Section -->
   <app-ai-insights></app-ai-insights>
 
-  <!-- Additional Charts Section -->
-  <div class="additional-charts">
-    <mat-card class="widget-card category-chart">
-      <mat-card-header>
-        <mat-card-title>Tasks by Category</mat-card-title>
-        <mat-card-subtitle>Breakdown of completed tasks by type</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="chart-container">
-          <ngx-charts-bar-vertical
-            [view]="view"
-            [scheme]="colorScheme"
-            [results]="taskCategoryData"
-            [gradient]="gradient"
-            [xAxis]="showXAxis"
-            [yAxis]="showYAxis"
-            [legend]="false"
-            [showXAxisLabel]="showXAxisLabel"
-            [showYAxisLabel]="showYAxisLabel"
-            [xAxisLabel]="'Category'"
-            [yAxisLabel]="'Tasks'"
-            [animations]="animations"
-            [roundDomains]="true"
-            (select)="onSelect($event)"
-            (activate)="onActivate($event)"
-            (deactivate)="onDeactivate($event)">
-          </ngx-charts-bar-vertical>
-        </div>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="widget-card pomodoro-chart">
-      <mat-card-header>
-        <mat-card-title>Today's Focus Sessions</mat-card-title>
-        <mat-card-subtitle>Pomodoro sessions throughout the day</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="chart-container">
-          <ngx-charts-area-chart
-            [view]="view"
-            [scheme]="pomodoroColorScheme"
-            [results]="[{ name: 'Focus Time', series: pomodoroData }]"
-            [gradient]="true"
-            [xAxis]="showXAxis"
-            [yAxis]="showYAxis"
-            [legend]="false"
-            [showXAxisLabel]="showXAxisLabel"
-            [showYAxisLabel]="showYAxisLabel"
-            [xAxisLabel]="'Time'"
-            [yAxisLabel]="'Sessions'"
-            [animations]="animations"
-            [curve]="'cardinal'"
-            (select)="onSelect($event)"
-            (activate)="onActivate($event)"
-            (deactivate)="onDeactivate($event)">
-          </ngx-charts-area-chart>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
 </div>

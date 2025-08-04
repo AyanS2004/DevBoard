@@ -1,154 +1,465 @@
 <div class="ai-insights-container">
-  <mat-card class="insights-card">
-    <mat-card-header>
-      <mat-card-title>
-        <mat-icon>psychology</mat-icon>
-        AI Insights
-      </mat-card-title>
-      <mat-card-subtitle>
-        Personalized productivity analysis
-      </mat-card-subtitle>
-      <div class="spacer"></div>
-      <button mat-icon-button (click)="refreshInsights()" [disabled]="loading">
+  <!-- Enhanced Header with Action Buttons -->
+  <div class="insights-header">
+    <div class="header-title">
+      <mat-icon class="ai-icon">psychology</mat-icon>
+      <div class="title-content">
+        <h2>AI Productivity Insights</h2>
+        <p>Personalized analysis powered by machine learning</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button mat-icon-button (click)="refreshInsights()" [disabled]="loading" class="refresh-btn">
         <mat-icon [class.spinning]="loading">refresh</mat-icon>
       </button>
-    </mat-card-header>
+      <button mat-icon-button class="settings-btn">
+        <mat-icon>settings</mat-icon>
+      </button>
+    </div>
+  </div>
 
-    <mat-card-content>
-      <!-- Loading State -->
-      <div *ngIf="loading" class="loading-state">
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        <p>Analyzing your productivity patterns...</p>
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="loading-content">
+      <mat-icon class="loading-icon">psychology</mat-icon>
+      <h3>Analyzing Your Productivity</h3>
+      <p>AI is processing your data patterns...</p>
+      <mat-progress-bar mode="indeterminate" class="loading-bar"></mat-progress-bar>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-state">
+    <div class="error-content">
+      <mat-icon class="error-icon">error_outline</mat-icon>
+      <h3>Analysis Unavailable</h3>
+      <p>Unable to load AI insights. Please try again.</p>
+      <button mat-raised-button color="primary" (click)="refreshInsights()">
+        <mat-icon>refresh</mat-icon>
+        Retry Analysis
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!loading && !error && insights" class="insights-content">
+    
+    <!-- Key Metrics Overview -->
+    <div class="metrics-overview">
+      <div class="metric-card productivity-card">
+        <div class="metric-header">
+          <mat-icon>trending_up</mat-icon>
+          <h3>Productivity Score</h3>
+        </div>
+        <div class="metric-value">
+          <span class="score">{{ insights.completionRate.toFixed(0) }}</span>
+          <span class="score-suffix">/100</span>
+        </div>
+        <div class="metric-progress">
+          <mat-progress-bar 
+            [value]="insights.completionRate" 
+            [color]="getCompletionRateColor(insights.completionRate)"
+            mode="determinate">
+          </mat-progress-bar>
+        </div>
+        <div class="metric-change" [ngClass]="{'positive': insights.weeklyTrend > 0, 'negative': insights.weeklyTrend < 0}">
+          <mat-icon>{{ insights.weeklyTrend > 0 ? 'trending_up' : 'trending_down' }}</mat-icon>
+          <span>{{ insights.weeklyTrend > 0 ? '+' : '' }}{{ insights.weeklyTrend }}% this week</span>
+        </div>
       </div>
 
-      <!-- Error State -->
-      <div *ngIf="error && !loading" class="error-state">
-        <mat-icon color="warn">error</mat-icon>
-        <p>Unable to load AI insights. Please try again.</p>
-        <button mat-button (click)="refreshInsights()">
-          <mat-icon>refresh</mat-icon>
-          Retry
+      <div class="metric-card focus-card">
+        <div class="metric-header">
+          <mat-icon>center_focus_strong</mat-icon>
+          <h3>Focus Score</h3>
+        </div>
+        <div class="metric-value">
+          <span class="score">{{ insights.focusScore }}</span>
+          <span class="score-suffix">/100</span>
+        </div>
+        <div class="metric-progress">
+          <mat-progress-bar 
+            [value]="insights.focusScore" 
+            [color]="insights.focusScore > 70 ? 'primary' : 'accent'"
+            mode="determinate">
+          </mat-progress-bar>
+        </div>
+        <div class="metric-detail">
+          <span>Peak time: {{ insights.mostProductiveTime }}</span>
+        </div>
+      </div>
+
+      <div class="metric-card burnout-card">
+        <div class="metric-header">
+          <mat-icon [style.color]="getBurnoutColor(insights.burnoutRisk)">health_and_safety</mat-icon>
+          <h3>Burnout Risk</h3>
+        </div>
+        <div class="metric-value">
+          <span class="score" [style.color]="getBurnoutColor(insights.burnoutRisk)">{{ insights.burnoutRisk }}</span>
+          <span class="score-suffix">%</span>
+        </div>
+        <div class="metric-progress">
+          <mat-progress-bar 
+            [value]="insights.burnoutRisk" 
+            [color]="insights.burnoutRisk > 70 ? 'warn' : 'accent'"
+            mode="determinate">
+          </mat-progress-bar>
+        </div>
+        <div class="metric-detail">
+          <span>{{ getBurnoutStatus(insights.burnoutRisk) }}</span>
+        </div>
+      </div>
+
+      <div class="metric-card efficiency-card">
+        <div class="metric-header">
+          <mat-icon>speed</mat-icon>
+          <h3>Efficiency</h3>
+        </div>
+        <div class="metric-value">
+          <span class="score">{{ formatTime(insights.averageTimePerTask) }}</span>
+          <span class="score-suffix">avg</span>
+        </div>
+        <div class="metric-detail">
+          <span>{{ insights.completedTasks }} tasks completed</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Today's Focus Session -->
+    <div class="focus-session-card">
+      <div class="card-header">
+        <h3>
+          <mat-icon>center_focus_strong</mat-icon>
+          Today's Focus Sessions
+        </h3>
+        <div class="header-actions">
+          <span class="session-count">{{ getTodaysFocusSessions().length }} sessions</span>
+          <button mat-raised-button color="primary" (click)="startFocusSession()">
+            <mat-icon>play_circle</mat-icon>
+            Start Session
+          </button>
+        </div>
+      </div>
+      <div class="focus-content">
+        <div class="focus-stats-grid">
+          <div class="stat-card total-time">
+            <div class="stat-icon">
+              <mat-icon>schedule</mat-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">{{ formatTime(getTotalFocusTimeToday()) }}</span>
+              <span class="stat-label">Total Focus Time</span>
+            </div>
+          </div>
+          <div class="stat-card avg-score">
+            <div class="stat-icon">
+              <mat-icon>trending_up</mat-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">{{ getAverageFocusScore() }}%</span>
+              <span class="stat-label">Avg Productivity</span>
+            </div>
+          </div>
+          <div class="stat-card session-count">
+            <div class="stat-icon">
+              <mat-icon>repeat</mat-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">{{ getTodaysFocusSessions().length }}</span>
+              <span class="stat-label">Sessions</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="focus-sessions-list" *ngIf="getTodaysFocusSessions().length > 0">
+          <h4>Recent Sessions</h4>
+          <div class="session-item" *ngFor="let session of getTodaysFocusSessions().slice(0, 3)">
+            <div class="session-info">
+              <div class="session-name">{{ session.name }}</div>
+              <div class="session-details">
+                <span class="duration">{{ session.duration }}min</span>
+                <span class="category">{{ session.category }}</span>
+              </div>
+            </div>
+            <div class="session-score" [class]="'score-' + (session.productivity >= 80 ? 'high' : session.productivity >= 60 ? 'medium' : 'low')">
+              {{ session.productivity }}%
+            </div>
+          </div>
+        </div>
+        
+        <div class="no-sessions" *ngIf="getTodaysFocusSessions().length === 0">
+          <mat-icon>sentiment_neutral</mat-icon>
+          <p>No focus sessions today. Start one to boost your productivity!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="recent-activity-card">
+      <div class="card-header">
+        <h3>
+          <mat-icon>history</mat-icon>
+          Recent Activity
+        </h3>
+        <div class="header-actions">
+          <mat-button-toggle-group [(value)]="selectedActivityPeriod" size="small">
+            <mat-button-toggle value="today">Today</mat-button-toggle>
+            <mat-button-toggle value="week">This Week</mat-button-toggle>
+          </mat-button-toggle-group>
+          <button mat-icon-button (click)="loadRecentActivities()">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="activity-content">
+        <div class="activity-timeline" *ngIf="recentActivities.length > 0">
+          <div class="activity-item" *ngFor="let activity of recentActivities.slice(0, 5); trackBy: trackActivity">
+            <div class="activity-icon" [style.background-color]="activity.color + '20'">
+              <mat-icon [style.color]="activity.color">{{ activity.icon }}</mat-icon>
+            </div>
+            <div class="activity-details">
+              <div class="activity-header">
+                <h4>{{ activity.title }}</h4>
+                <span class="activity-category">{{ activity.category }}</span>
+              </div>
+              <div class="activity-meta">
+                <span class="activity-time">{{ getTimeAgo(activity.timestamp) }}</span>
+                <mat-chip class="activity-type" [style.background-color]="activity.color + '20'" [style.color]="activity.color">
+                  {{ activity.type.replace('_', ' ') | titlecase }}
+                </mat-chip>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="no-activity" *ngIf="recentActivities.length === 0">
+          <mat-icon>inbox</mat-icon>
+          <p>No recent activity to display</p>
+          <button mat-button color="primary" (click)="loadRecentActivities()">
+            <mat-icon>refresh</mat-icon>
+            Refresh
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Burnout Risk Visualization -->
+    <div class="burnout-analysis-card">
+      <div class="card-header">
+        <h3>
+          <mat-icon>health_and_safety</mat-icon>
+          Burnout Risk Analysis
+        </h3>
+        <button mat-icon-button>
+          <mat-icon>info</mat-icon>
         </button>
       </div>
-
-      <!-- Main Content -->
-      <div *ngIf="!loading && !error && insights" class="insights-content">
-        <!-- Productivity Overview -->
-        <div class="productivity-overview">
-          <h3>Productivity Overview</h3>
-          <div class="stats-grid">
-            <div class="stat-item">
-              <span class="stat-value">{{ insights.completionRate.toFixed(1) }}%</span>
-              <span class="stat-label">Completion Rate</span>
-              <mat-progress-bar 
-                [value]="insights.completionRate" 
-                [color]="getCompletionRateColor(insights.completionRate)">
-              </mat-progress-bar>
-            </div>
-            <div class="stat-item">
-              <span class="stat-value">{{ formatTime(insights.averageTimePerTask) }}</span>
-              <span class="stat-label">Avg Time/Task</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-value">{{ insights.focusScore }}</span>
-              <span class="stat-label">Focus Score</span>
-              <mat-progress-bar 
-                [value]="insights.focusScore" 
-                [color]="insights.focusScore > 70 ? 'primary' : 'accent'">
-              </mat-progress-bar>
-            </div>
-            <div class="stat-item">
-              <span class="stat-value">{{ insights.mostProductiveTime }}</span>
-              <span class="stat-label">Peak Time</span>
-            </div>
+      <div class="burnout-chart-container">
+        <ngx-charts-gauge
+          [view]="[450, 350]"
+          [results]="[{ name: 'Burnout Risk', value: insights.burnoutRisk }]"
+          [min]="0"
+          [max]="100"
+          [angleSpan]="240"
+          [startAngle]="-120"
+          [units]="'%'"
+          [bigSegments]="10"
+          [smallSegments]="5"
+          [showAxis]="true"
+          [scheme]="burnoutColorScheme"
+          [animations]="true"
+          [margin]="[40, 80, 40, 80]">
+        </ngx-charts-gauge>
+      </div>
+      <div class="burnout-factors">
+        <div class="factor-item">
+          <mat-icon>schedule</mat-icon>
+          <span>Workload Pressure</span>
+          <div class="factor-bar">
+            <mat-progress-bar [value]="getWorkloadPressure()" mode="determinate"></mat-progress-bar>
           </div>
         </div>
+        <div class="factor-item">
+          <mat-icon>event_busy</mat-icon>
+          <span>Deadline Stress</span>
+          <div class="factor-bar">
+            <mat-progress-bar [value]="getDeadlineStress()" mode="determinate"></mat-progress-bar>
+          </div>
+        </div>
+        <div class="factor-item">
+          <mat-icon>all_inclusive</mat-icon>
+          <span>Work-Life Balance</span>
+          <div class="factor-bar">
+            <mat-progress-bar [value]="getWorkLifeBalance()" mode="determinate"></mat-progress-bar>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        <!-- Category Breakdown -->
-        <div class="category-breakdown" *ngIf="getCategoryEntries(insights.categoryStats).length > 0">
-          <h3>Task Categories</h3>
-          <div class="category-list">
-            <div class="category-item" *ngFor="let category of getCategoryEntries(insights.categoryStats)">
-              <div class="category-info">
-                <span class="category-name">{{ category.key }}</span>
-                <span class="category-count">{{ category.value }} tasks</span>
-              </div>
-              <div class="category-progress">
-                <mat-progress-bar 
-                  [value]="getCategoryPercentage(category.value, insights.totalTasks)"
-                  mode="determinate">
-                </mat-progress-bar>
-                <span class="percentage">{{ getCategoryPercentage(category.value, insights.totalTasks).toFixed(1) }}%</span>
-              </div>
+    <!-- AI Recommendations with Better Design -->
+    <div class="recommendations-card" *ngIf="recommendations.length > 0">
+      <div class="card-header">
+        <h3>
+          <mat-icon>lightbulb</mat-icon>
+          AI Recommendations
+        </h3>
+        <mat-chip-listbox>
+          <mat-chip selected>Smart Insights</mat-chip>
+        </mat-chip-listbox>
+      </div>
+      <div class="recommendations-grid">
+        <div class="recommendation-item" *ngFor="let rec of recommendations" [ngClass]="'priority-' + rec.priority">
+          <div class="recommendation-icon">
+            <mat-icon [style.color]="rec.color || getInsightColor(rec.type)">
+              {{ rec.icon || getInsightIcon(rec.type) }}
+            </mat-icon>
+          </div>
+          <div class="recommendation-content">
+            <div class="recommendation-header">
+              <h4>{{ rec.title }}</h4>
+              <mat-chip [style.background-color]="getPriorityColor(rec.priority)">
+                {{ rec.priority.toUpperCase() }}
+              </mat-chip>
             </div>
-          </div>
-        </div>
-
-        <!-- Weekly Trend -->
-        <div class="weekly-trend" *ngIf="insights.weeklyTrend !== 0">
-          <h3>Weekly Trend</h3>
-          <div class="trend-indicator" [ngClass]="{'positive': insights.weeklyTrend > 0, 'negative': insights.weeklyTrend < 0}">
-            <mat-icon>{{ insights.weeklyTrend > 0 ? 'trending_up' : 'trending_down' }}</mat-icon>
-            <span>{{ insights.weeklyTrend > 0 ? '+' : '' }}{{ insights.weeklyTrend }}%</span>
-            <span class="trend-text">{{ insights.weeklyTrend > 0 ? 'improvement' : 'decline' }} from last week</span>
-          </div>
-        </div>
-
-        <!-- Burnout Risk -->
-        <div class="burnout-risk" *ngIf="insights.burnoutRisk > 30">
-          <h3>Burnout Risk</h3>
-          <div class="risk-indicator" [ngClass]="{'high': insights.burnoutRisk > 70, 'medium': insights.burnoutRisk > 40}">
-            <mat-icon>{{ insights.burnoutRisk > 70 ? 'warning' : 'info' }}</mat-icon>
-            <span>{{ insights.burnoutRisk }}% Risk Level</span>
-            <mat-progress-bar 
-              [value]="insights.burnoutRisk" 
-              [color]="insights.burnoutRisk > 70 ? 'warn' : 'accent'">
-            </mat-progress-bar>
-          </div>
-        </div>
-
-        <!-- AI Recommendations -->
-        <div class="ai-recommendations" *ngIf="recommendations.length > 0">
-          <h3>AI Recommendations</h3>
-          <div class="recommendations-list">
-            <div class="recommendation-item" *ngFor="let rec of recommendations">
-              <div class="recommendation-header">
-                <mat-icon [style.color]="rec.color || getInsightColor(rec.type)">
-                  {{ rec.icon || getInsightIcon(rec.type) }}
-                </mat-icon>
-                <div class="recommendation-title">
-                  <h4>{{ rec.title }}</h4>
-                  <mat-chip 
-                    [style.background-color]="getPriorityColor(rec.priority)"
-                    [style.color]="'white'"
-                    [style.font-size]="'0.75rem'">
-                    {{ rec.priority.toUpperCase() }}
-                  </mat-chip>
-                </div>
-              </div>
-              <p class="recommendation-description">{{ rec.description }}</p>
-              <div class="recommendation-meta">
-                <span class="category">{{ rec.category }}</span>
-                <span class="actionable" *ngIf="rec.actionable">
-                  <mat-icon>task_alt</mat-icon>
-                  Actionable
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick Tips -->
-        <div class="quick-tips" *ngIf="insights.recommendations.length > 0">
-          <h3>Quick Tips</h3>
-          <div class="tips-list">
-            <div class="tip-item" *ngFor="let tip of insights.recommendations">
-              <mat-icon>lightbulb</mat-icon>
-              <span>{{ tip }}</span>
+            <p>{{ rec.description }}</p>
+            <div class="recommendation-actions">
+              <button mat-button color="primary" *ngIf="rec.actionable">
+                <mat-icon>play_arrow</mat-icon>
+                Apply
+              </button>
+              <button mat-button>
+                <mat-icon>info</mat-icon>
+                Learn More
+              </button>
             </div>
           </div>
         </div>
       </div>
-    </mat-card-content>
-  </mat-card>
+    </div>
+
+    <!-- Productivity Trends Chart -->
+    <div class="trends-card">
+      <div class="card-header">
+        <h3>
+          <mat-icon>analytics</mat-icon>
+          Productivity Trends
+        </h3>
+        <mat-button-toggle-group [(value)]="selectedTrendPeriod">
+          <mat-button-toggle value="week">Week</mat-button-toggle>
+          <mat-button-toggle value="month">Month</mat-button-toggle>
+          <mat-button-toggle value="year">Year</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+      <div class="trends-chart">
+        <ngx-charts-line-chart
+          [view]="[700, 400]"
+          [results]="getTrendData()"
+          [scheme]="trendColorScheme"
+          [gradient]="true"
+          [xAxis]="true"
+          [yAxis]="true"
+          [legend]="true"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxisLabel]="'Time'"
+          [yAxisLabel]="'Performance Score'"
+          [animations]="true"
+          [curve]="'cardinal'"
+          [roundDomains]="true"
+          [showGridLines]="true">
+        </ngx-charts-line-chart>
+      </div>
+    </div>
+
+    <!-- Category Performance -->
+    <!-- Task Categories - Simple Layout -->
+    <div class="task-categories-card">
+      <div class="card-header">
+        <h3><mat-icon>donut_large</mat-icon> Task Categories</h3>
+        <p>Performance breakdown by category</p>
+      </div>
+      
+      <div class="categories-grid">
+        <div class="categories-chart">
+          <ngx-charts-pie-chart
+            [view]="[400, 300]"
+            [results]="getCategoryData()"
+            [scheme]="colorScheme"
+            [legend]="true"
+            [legendPosition]="legendPosition"
+            [labels]="true"
+            [doughnut]="true">
+          </ngx-charts-pie-chart>
+        </div>
+        
+        <div class="categories-list">
+          <div class="category-item" *ngFor="let category of getCategoryData(); let i = index">
+            <div class="category-info">
+              <div class="category-color" [style.background-color]="getCategoryColor(i)"></div>
+              <span class="category-name">{{ category.name }}</span>
+            </div>
+            <div class="category-value">{{ category.value }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Mood & Sentiment Analysis -->
+    <!-- Wellness Dashboard - Simple Layout -->
+    <div class="wellness-card">
+      <div class="card-header">
+        <h3><mat-icon>psychology</mat-icon> Wellness Dashboard</h3>
+        <p>Mood and productivity insights</p>
+      </div>
+      
+      <div class="wellness-grid">
+        <div class="wellness-stats">
+          <div class="stat-box energy">
+            <div class="stat-icon"><mat-icon>battery_charging_full</mat-icon></div>
+            <div class="stat-info">
+              <div class="stat-label">Energy</div>
+              <div class="stat-value">{{ getEnergyLevel() }}%</div>
+            </div>
+          </div>
+          
+          <div class="stat-box stress">
+            <div class="stat-icon"><mat-icon>sentiment_stressed</mat-icon></div>
+            <div class="stat-info">
+              <div class="stat-label">Stress</div>
+              <div class="stat-value">{{ getStressLevel() }}%</div>
+            </div>
+          </div>
+          
+          <div class="stat-box focus">
+            <div class="stat-icon"><mat-icon>center_focus_strong</mat-icon></div>
+            <div class="stat-info">
+              <div class="stat-label">Focus</div>
+              <div class="stat-value">{{ getFocusLevel() }}%</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="wellness-chart">
+          <h4>Overall Sentiment</h4>
+          <ngx-charts-gauge
+            [view]="[300, 200]"
+            [results]="[{ name: 'Sentiment', value: getMoodScore() }]"
+            [min]="0"
+            [max]="100"
+            [angleSpan]="240"
+            [startAngle]="-120"
+            [units]="''"
+            [bigSegments]="4"
+            [smallSegments]="2"
+            [showAxis]="true"
+            [scheme]="gaugeColorScheme"
+            [animations]="true">
+          </ngx-charts-gauge>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
 </div> 
